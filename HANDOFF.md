@@ -29,7 +29,7 @@ User goal: build a better Cal AI-style nutrition app, with photo estimates and o
 
 ## Checkpoint
 
-Type checking and production build pass. Eleven focused Node/DOM tests pass, covering nutrition math, German product normalization, validation, authentication, per-user storage, stale-write conflicts, configured/missing AI behavior, onboarding, manual food scaling, persistence after reload, deletion, and hydration. External API calls in these tests are mocked. Source synchronization and final publication are in progress. Browser visual verification and physical camera testing are not available in this environment.
+Type checking and production build pass. Eleven focused Node/DOM tests pass, covering nutrition math, German product normalization, validation, authentication, per-user storage, stale-write conflicts, configured/missing AI behavior, onboarding, manual food scaling, persistence after reload, deletion, and hydration. External API calls in these tests are mocked. Source is pushed to the Site repository and the user GitHub branch `codex/nouri`. Initial publication validation required `r2` to be a binding-name string; corrected it to `"BUCKET"`. Final publication is in progress. Browser visual verification and physical camera testing are not available in this environment.
 
 ## Next steps
 
