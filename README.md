@@ -20,7 +20,7 @@ npm ci
 npm run dev
 ```
 
-Open the printed local URL (normally http://127.0.0.1:5173). The development API uses a local preview identity and `work/local-journal.json`. Neither is included in production.
+Open the printed local URL (normally http://127.0.0.1:5173). The development API uses a local preview identity and `work/local-data/`. Neither is included in production.
 
 ```sh
 npm run check
@@ -46,6 +46,6 @@ Open Food Facts is a community-maintained database licensed under ODbL. EAN/UPC 
 
 Generic foods and AI results are estimates, reviewed by the user. Nutrition targets are estimates for adults, not medical prescriptions. The app is an original implementation inspired by common nutrition-tracking workflows, not an official Cal AI product or a claim of complete proprietary feature parity.
 
-Photos attached to meals are stored in the private journal; journal writes are capped at 4 MB. Export backups contain personal nutrition data and any attached photos. Demo food photography is remotely loaded from Unsplash. Fonts are bundled locally.
+Photos attached to meals are stored as separate private R2 objects; journal writes are capped at 4 MB. Export backups contain personal nutrition data and photo references. The photos remain tied to your signed-in Site account. Demo food photography is remotely loaded from Unsplash. Fonts are bundled locally.
 
 Read `HANDOFF.md` to resume work and see current verification and deployment state.

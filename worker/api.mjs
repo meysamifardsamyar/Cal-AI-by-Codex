@@ -7,7 +7,22 @@ export async function handleApi(request,env){
  const uid=request.headers.get('oai-authenticated-user-id');
  if(!uid)return fail('Sign in with ChatGPT to access your nutrition journal.',401);
  if(request.method!=='GET'&&request.headers.get('origin')&&request.headers.get('origin')!==url.origin)return fail('Invalid request origin.',403);
- if(path==='/api/status')return json({photoReady:!!env.OPENAI_API_KEY,cloudReady:!!env.BUCKET});
+ if(path==='/api/status')return json({photoReady:!!env.OPENAI_API_KEY,cloudReady:!!env.BUCKET,userId:uid});
+ if(path==='/api/photo'&&request.method==='POST'){
+  if(!env.BUCKET)return fail('Photo saving is temporarily unavailable. Please try again.',503);
+  const raw=await request.text();if(raw.length>3e6)return fail('Please choose a smaller photo.',413);
+  let b;try{b=JSON.parse(raw)}catch{return fail('Invalid photo.',400)}
+  if(!/^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(b.image||''))return fail('Invalid photo format.',400);
+  const id=crypto.randomUUID();const bytes=Uint8Array.from(atob(b.image.split(',')[1]),c=>c.charCodeAt(0));
+  await env.BUCKET.put(`users/${encodeURIComponent(uid)}/photos/${id}.jpg`,bytes,{httpMetadata:{contentType:'image/jpeg'}});
+  return json({url:'/api/photo/'+id});
+ }
+ if(path.startsWith('/api/photo/')&&request.method==='GET'){
+  const id=path.split('/').at(-1);if(!/^[0-9a-f-]{36}$/.test(id))return fail('Invalid photo.',400);
+  if(!env.BUCKET)return fail('Photo storage unavailable.',503);
+  const obj=await env.BUCKET.get(`users/${encodeURIComponent(uid)}/photos/${id}.jpg`);
+  return obj?new Response(obj.body,{headers:{'Content-Type':'image/jpeg','Cache-Control':'private,max-age=3600','X-Content-Type-Options':'nosniff'}}):fail('Photo not found.',404);
+ }
  if(path==='/api/state'){
   if(!env.BUCKET)return fail('Cloud saving is unavailable. Your recovery copy remains on this device.',503);
   const key=`users/${encodeURIComponent(uid)}/journal.json`;
@@ -25,7 +40,7 @@ export async function handleApi(request,env){
  if(path==='/api/product'&&request.method==='GET'){
   const code=url.searchParams.get('barcode')||'';
   if(!/^\d{8}$|^\d{12,14}$/.test(code))return fail('Enter an 8, 12, 13 or 14-digit barcode.',400);
-  const fields='code,product_name_de,product_name,generic_name_de,brands,nutriments,image_front_small_url,nutriscore_grade,serving_quantity,nutrition_data_per';
+  const fields='code,product_name_de,product_name,generic_name_de,brands,nutriments,image_front_small_url,nutriscore_grade,serving_quantity,nutrition_data_per,product_quantity_unit';
   try{const res=await fetch(`https://world.openfoodfacts.org/api/v2/product/${code}.json?lc=de&fields=${fields}`,{headers:{'User-Agent':'Nouri/1.0 (personal nutrition journal)'},signal:AbortSignal.timeout(12000)});
    if(!res.ok&&res.status!==404)return fail('The product database is busy. Please try again or enter the label manually.',502);
    const body=await res.json();if(body.status!==1)return fail('Product not found. You can add its nutrition label manually.',404);
@@ -55,9 +70,12 @@ export async function handleApi(request,env){
 export function validState(s){
  if(!s||!Array.isArray(s.meals)||s.meals.length>15000||!Array.isArray(s.weights)||!Array.isArray(s.favorites)||!s.water||typeof s.water!=='object'||!s.goals)return false;
  const finite=(v,max=100000)=>typeof v==='number'&&Number.isFinite(v)&&v>=0&&v<=max;
- if(!['kcal','protein','carbs','fat','fiber','water'].every(k=>finite(s.goals[k])))return false;
- if(!s.meals.every(m=>typeof m.id==='string'&&typeof m.name==='string'&&m.name.length<=250&&/^\d{4}-\d{2}-\d{2}$/.test(m.date)&&['kcal','protein','carbs','fat','fiber','grams'].every(k=>finite(m[k]))))return false;
+ if(!['kcal','protein','carbs','fat','fiber','water'].every(k=>finite(s.goals[k])&&s.goals[k]>0))return false;
+ if(s.profile!==null&&(!s.profile||typeof s.profile.name!=='string'||s.profile.name.length>40||!finite(s.profile.age,100)||s.profile.age<18||!finite(s.profile.weight,300)||s.profile.weight<35||!finite(s.profile.height,230)||s.profile.height<120||!finite(s.profile.targetWeight,300)||s.profile.targetWeight<35||!['male','female','average'].includes(s.profile.sex)||!['lose','maintain','gain'].includes(s.profile.goal)||!['1.2','1.375','1.55','1.725'].includes(s.profile.activity)))return false;
+ const safeImage=v=>v===undefined||v===''||typeof v==='string'&&(/^(https?:\/\/|\/api\/photo\/)/.test(v)||/^data:image\/(jpeg|png|webp);base64,/.test(v));
+ if(!s.meals.every(m=>typeof m.id==='string'&&typeof m.name==='string'&&m.name.length<=250&&/^\d{4}-\d{2}-\d{2}$/.test(m.date)&&['Breakfast','Lunch','Dinner','Snack'].includes(m.meal)&&typeof m.time==='string'&&typeof m.source==='string'&&safeImage(m.image)&&m.grams>0&&['kcal','protein','carbs','fat','fiber','grams'].every(k=>finite(m[k]))))return false;
  if(!s.weights.every(w=>/^\d{4}-\d{2}-\d{2}$/.test(w.date)&&finite(w.value,500)&&w.value>=20))return false;
- if(!Object.values(s.water).every(v=>finite(v,30000)))return false;
+ if(!Object.entries(s.water).every(([k,v])=>/^\d{4}-\d{2}-\d{2}$/.test(k)&&finite(v,30000)))return false;
+ if(!s.favorites.every(f=>typeof f.name==='string'&&f.name.length<=250&&safeImage(f.image)&&['kcal','protein','carbs','fat','fiber'].every(k=>finite(f[k]))))return false;
  return true;
 }

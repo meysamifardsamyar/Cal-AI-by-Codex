@@ -29,7 +29,7 @@ User goal: build a better Cal AI-style nutrition app, with photo estimates and o
 
 ## Checkpoint
 
-Feature implementation is present. Type-check/build, focused API/calculation/interaction tests, source synchronization, final publication and verification are in progress. Update this section with exact results before final handoff.
+Type checking and production build pass. Eleven focused Node/DOM tests pass, covering nutrition math, German product normalization, validation, authentication, per-user storage, stale-write conflicts, configured/missing AI behavior, onboarding, manual food scaling, persistence after reload, deletion, and hydration. External API calls in these tests are mocked. Source synchronization and final publication are in progress. Browser visual verification and physical camera testing are not available in this environment.
 
 ## Next steps
 

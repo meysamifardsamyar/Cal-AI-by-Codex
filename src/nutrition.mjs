@@ -14,5 +14,5 @@ export function normalizeProduct(p){
  const kcal=n['energy-kcal_100g']??(Number.isFinite(n.energy_100g)?n.energy_100g/4.184:null);
  const fields=[kcal,n.proteins_100g,n.carbohydrates_100g,n.fat_100g];
  if(fields.some(v=>!Number.isFinite(v)||v<0))return null;
- return {name:p.product_name_de||p.product_name||p.generic_name_de||'Unnamed product',brand:p.brands||'',kcal:Math.round(kcal),protein:n.proteins_100g,carbs:n.carbohydrates_100g,fat:n.fat_100g,fiber:n.fiber_100g||0,image:p.image_front_small_url||'',barcode:p.code||'',serving:p.serving_quantity||100,nutriscore:p.nutriscore_grade||'',source:'Open Food Facts',basis:/100\s?ml/i.test(p.nutrition_data_per||'')?'ml':'g'};
+ return {name:p.product_name_de||p.product_name||p.generic_name_de||'Unnamed product',brand:p.brands||'',kcal:Math.round(kcal),protein:n.proteins_100g,carbs:n.carbohydrates_100g,fat:n.fat_100g,fiber:n.fiber_100g||0,image:p.image_front_small_url||'',barcode:p.code||'',serving:p.serving_quantity||100,nutriscore:p.nutriscore_grade||'',source:'Open Food Facts',basis:p.product_quantity_unit==='ml'||/100\s?ml/i.test(p.nutrition_data_per||'')?'ml':'g'};
 }
