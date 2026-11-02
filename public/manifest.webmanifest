@@ -1,0 +1,16 @@
+{
+  "id": "/",
+  "name": "Nouri · Your daily nutrition",
+  "short_name": "Nouri",
+  "description": "Your food, daily nutrition and progress, in one calm place.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#101813",
+  "theme_color": "#183e31",
+  "icons": [
+    {"src":"/icons/nouri-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"/icons/nouri-512.png","sizes":"512x512","type":"image/png","purpose":"any"},
+    {"src":"/icons/nouri-maskable-512.png","sizes":"512x512","type":"image/png","purpose":"maskable"}
+  ]
+}

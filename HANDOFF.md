@@ -39,3 +39,12 @@ Type checking and production build pass. Eleven focused Node/DOM tests pass, cov
 4. Preserve this Site identity and private audience on future edits. Source and checkpoint are already saved to GitHub.
 
 No private runtime journal files or credentials should be committed or uploaded with source.
+
+## Appearance and phone setup update
+
+- Dark mode covers the full app. Header moon/sun button toggles light/dark; Settings → Make yourself comfortable offers Light, Dark, or System. System is the default and follows OS changes live. The preference is device-local and applies before React loads to avoid a light flash.
+- `src/useTheme.ts`, `src/dark.css`: theme behavior and palette.
+- `src/InstallHelp.tsx`: iPhone/Android home-screen instructions plus native install prompt when available.
+- `public/manifest.webmanifest` and `public/icons/`: standalone web app metadata and real PNG home-screen icons. The private manifest link includes credentials. No offline or service-worker caching is added.
+- iPhone: Safari → Share → Add to Home Screen → Add (leave Open as Web App enabled if offered). Android: Chrome → ⋮ → Add to home screen / Install app. Open in the browser from ChatGPT first and sign in with the same account.
+- TypeScript, existing 11 regression checks, production build, manifest/icon route checks pass. Physical phone installation and visual browser testing remain unverified because the required browser tooling is unavailable.

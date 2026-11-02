@@ -10,6 +10,8 @@ A responsive nutrition companion built for everyday use in Germany. The app incl
 - Adult profile setup, Mifflin–St Jeor goal calculation, adjustable calorie/macro/fiber/water targets.
 - Private signed-in cloud journal with R2 conditional writes, browser recovery copy, JSON import/export.
 - Responsive layouts, keyboard focus management, reduced-motion support, self-hosted fonts.
+- Light, Dark and System appearance, remembered on each device, with a header toggle.
+- Home-screen app icons and a standalone manifest; in-app iPhone/Android installation guide under Settings.
 
 ## Develop
 
@@ -49,3 +51,12 @@ Generic foods and AI results are estimates, reviewed by the user. Nutrition targ
 Photos attached to meals are stored as separate private R2 objects; journal writes are capped at 4 MB. Export backups contain personal nutrition data and photo references. The photos remain tied to your signed-in Site account. Demo food photography is remotely loaded from Unsplash. Fonts are bundled locally.
 
 Read `HANDOFF.md` to resume work and see current verification and deployment state.
+
+## On your phone
+
+Open https://nouri-daily-nutrition.placidcourt.chatgpt.site in your phone browser and sign in with the same ChatGPT account.
+
+- iPhone/iPad: Safari → Share → Add to Home Screen → Add. Leave Open as Web App on if shown.
+- Android: Chrome → three-dot menu → Add to home screen or Install app → confirm.
+
+Use Settings → Add to home screen for the in-app guide. This is a web app; cloud saving, product lookup and AI photo analysis need an internet connection.
