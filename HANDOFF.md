@@ -29,13 +29,13 @@ User goal: build a better Cal AI-style nutrition app, with photo estimates and o
 
 ## Checkpoint
 
-Type checking and production build pass. Eleven focused Node/DOM tests pass, covering nutrition math, German product normalization, validation, authentication, per-user storage, stale-write conflicts, configured/missing AI behavior, onboarding, manual food scaling, persistence after reload, deletion, and hydration. External API calls in these tests are mocked. Source is pushed to the Site repository and the user GitHub branch `codex/nouri`. Initial publication validation required `r2` to be a binding-name string; corrected it to `"BUCKET"`. Final publication is in progress. Browser visual verification and physical camera testing are not available in this environment.
+Type checking and production build pass. Eleven focused Node/DOM tests pass, covering nutrition math, German product normalization, validation, authentication, per-user storage, stale-write conflicts, configured/missing AI behavior, onboarding, manual food scaling, persistence after reload, deletion, and hydration. External API calls in these tests are mocked. Source is pushed to the Site repository and the user GitHub branch `codex/nouri`. Initial publication validation required `r2` to be a binding-name string; corrected it to `"BUCKET"`. Private publication succeeded. See DEPLOYMENT.md for the verified URL and exact deployment/version identifiers. Browser visual verification and physical camera testing are not available in this environment.
 
 ## Next steps
 
-1. Finish verification; fix actual defects, including validating R2 manifest shape through deployment.
-2. Sync the exact source state to the Site Git repository, build and package the matching artifact, and publish privately.
-3. Save a source backup and push a new branch to the user's existing Git repository where authorized.
-4. Report the literal verified URL, what works, and the outstanding AI connection/hardware-camera test limits.
+1. Configure the OpenAI production secret after the supported plugin connection is available.
+2. Verify live photo estimates and German barcode products in the published app.
+3. Perform visual browser QA at mobile and desktop sizes, and physical phone camera testing.
+4. Preserve this Site identity and private audience on future edits. Source and checkpoint are already saved to GitHub.
 
 No private runtime journal files or credentials should be committed or uploaded with source.
