@@ -22,7 +22,7 @@ User goal: build a better Cal AI-style nutrition app, with photo estimates and o
 
 ## Known prerequisites
 
-- OpenAI Developers plugin was requested but has not been confirmed connected. Real photo analysis requires `OPENAI_API_KEY` configured as a Sites runtime secret. Follow that plugin's API-key skill if connected; do not ask for API secrets in chat or add them to source.
+- `OPENAI_API_KEY` is configured as a private Sites production secret (environment revision 1). The existing saved version was successfully redeployed with it on 2 November 2026. Photo analysis is enabled; the key's permissions/billing still need a live photo request to verify. Never copy the secret into source, handoff notes, or client code.
 - The attached cloud environment has package-manager/Git allowlists only, with no secrets. Local direct integration tests against OpenAI/Open Food Facts are not authorized by its current network policy. Production Workers use their own runtime connectivity.
 - Sites helper scripts and full Vinext starter were not present locally; cloud skill docs were readable, helper code was not. A small compatible Worker build is used as the fallback. Do not claim helpers or browser QA ran.
 - The available browser skill requires a Node REPL tool that is absent from this tool surface. No browser-controlled visual verification has occurred yet.
@@ -33,7 +33,7 @@ Type checking and production build pass. Eleven focused Node/DOM tests pass, cov
 
 ## Next steps
 
-1. Configure the OpenAI production secret after the supported plugin connection is available.
+1. OpenAI secret setup and private redeployment are complete. No plugin connection is needed for this supplied key.
 2. Verify live photo estimates and German barcode products in the published app.
 3. Perform visual browser QA at mobile and desktop sizes, and physical phone camera testing.
 4. Preserve this Site identity and private audience on future edits. Source and checkpoint are already saved to GitHub.
