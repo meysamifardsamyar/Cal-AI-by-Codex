@@ -1,0 +1,10 @@
+import {createServer} from 'node:http';
+import {createServer as createViteServer} from 'vite';
+import {handleApi} from '../worker/api.mjs';
+import {mkdir,readFile,writeFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+await mkdir('work',{recursive:true});
+const file='work/local-journal.json';
+const bucket={async get(){try{const t=await readFile(file,'utf8');return {etag:createHash('sha256').update(t).digest('hex'),json:async()=>JSON.parse(t)}}catch{return null}},async put(k,v,opts){const old=await this.get();if((opts.onlyIf.etagMatches&&old?.etag!==opts.onlyIf.etagMatches)||(opts.onlyIf.etagDoesNotMatch==='*'&&old))return null;await writeFile(file,v);return {etag:createHash('sha256').update(v).digest('hex')}}};
+const server=createServer(async(req,res)=>{try{const parts=[];for await(const p of req)parts.push(p);const headers=new Headers();for(const [k,v]of Object.entries(req.headers))if(v)headers.set(k,Array.isArray(v)?v.join(','):v);headers.set('oai-authenticated-user-id','local-preview');headers.delete('origin');const r=new Request('http://127.0.0.1:5174'+req.url,{method:req.method,headers,...(req.method!=='GET'&&req.method!=='HEAD'?{body:Buffer.concat(parts)}:{})});const response=await handleApi(r,{BUCKET:bucket,OPENAI_API_KEY:process.env.OPENAI_API_KEY,OPENAI_MODEL:process.env.OPENAI_MODEL});res.writeHead(response.status,Object.fromEntries(response.headers));res.end(Buffer.from(await response.arrayBuffer()))}catch{res.writeHead(500);res.end('Local API error')}});server.listen(5174,'127.0.0.1');
+const vite=await createViteServer();await vite.listen();vite.printUrls();

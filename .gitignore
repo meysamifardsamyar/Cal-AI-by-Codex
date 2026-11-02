@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env*
+!.env.example
+.dev.vars*
+work/
+.sites-runtime/
+.wrangler/
+*.tgz
+*.zip
