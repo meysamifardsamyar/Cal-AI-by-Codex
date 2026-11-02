@@ -4,9 +4,9 @@ Published successfully on 2 November 2026.
 
 - Live private URL: https://nouri-daily-nutrition.placidcourt.chatgpt.site
 - Site ID: appgprj_6ae8ab67d344819186397486440cb81e
-- Deployment ID: appgdep_6ae8b816d9088191a767f77d44a5fbf7
-- Saved version ID: appgprj_6ae8ab67d344819186397486440cb81e~appgver_bdb6cb0f7ad48191ad927e2af4c5a718
-- Deployed source commit: dba6dc36f62368252345b11bb170d4501a6c84d1
+- Deployment ID: appgdep_6ae8bbb97f0081918eb0976e2cf8c6fd
+- Saved version ID: appgprj_6ae8ab67d344819186397486440cb81e~appgver_d0f5a30935a481918a5bdf076d91262b
+- Deployed source commit: 123c6fe13b16a151ef824cadb5b4fa67fe07efb7
 - GitHub source: https://github.com/meysamifardsamyar/Cal-AI-by-Codex/tree/codex/nouri
 
 TypeScript check, production build, and 11 focused API/DOM tests pass. Native Sites deployment reports succeeded. No browser visual QA or physical camera test was available; live OpenAI/Open Food Facts calls were not tested from the restricted authoring environment.
@@ -19,3 +19,5 @@ To resume: read HANDOFF.md and README.md, then use the same Site ID. Do not crea
 
 Artifact packaging for this fallback builder: from the checkout, run npm run build, then tar -czf /absolute/path/nouri-site.tgz .openai dist/server. The archive must retain dist/server/index.js at that path. The hosting manifest declares r2 as the string BUCKET, not an object.
 
+
+Dark mode and home-screen setup update is now published. Type check, 11 regression tests, production build, manifest MIME and PNG icon checks pass. The OpenAI server secret remains configured at environment revision 1. Device installation and visual browser QA remain unverified.
